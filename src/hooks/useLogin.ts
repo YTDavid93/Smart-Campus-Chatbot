@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../api/axios";
 import { toast } from "react-toastify";
 import useAuth from "./useAuth";
+import axiosInstance from "../api/axios";
 
 const LOGIN_URL = "/auth";
 
@@ -17,7 +17,7 @@ const useSignup = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.post(LOGIN_URL, data);
+      const response = await axiosInstance.post(LOGIN_URL, data);
       const token = response.headers["x-auth-token"];
 
       if (token) {
