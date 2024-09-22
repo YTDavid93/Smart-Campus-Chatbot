@@ -1,19 +1,13 @@
-import { useContext, useState } from "react";
-import AuthContext from "../context/AuthProvider";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { toast } from "react-toastify";
+import useAuth from "./useAuth";
 
 const SIGNUP_URL = "/users";
 
 const useSignup = () => {
-  const authContext = useContext(AuthContext);
-
-  if (!authContext) {
-    throw new Error("AuthContext must be used within an AuthProvider");
-  }
-
-  const { setAuth } = authContext;
+  const { setAuth } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -35,7 +29,7 @@ const useSignup = () => {
         email: data.email,
         token,
       });
-      
+
       toast.success("Account created Successfully");
       navigate("/login");
     } catch (err) {
