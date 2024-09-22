@@ -1,17 +1,14 @@
-import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import AuthContext from "../context/AuthProvider";
+import useAuth from "../hooks/useAuth";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const authContext = useContext(AuthContext);
+  const { auth } = useAuth();
 
-  if (!authContext) {
-    throw new Error("AuthContext must be used within an AuthProvider");
+  if (!auth?.token) {
+    return <Navigate to="/login" />;
   }
 
-  const { auth } = authContext;
-
-  return auth?.token ? children : <Navigate to="/login" />;
+  return children;
 };
 
 export default ProtectedRoute;
