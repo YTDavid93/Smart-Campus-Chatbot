@@ -43,10 +43,9 @@ const ChatInput = ({ onClick }: Props) => {
         rows={1}
         onChange={onInputChange}
       />
-      <Send
-        className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50"
-        onClick={handleSendClick}
-      />
+      <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
+        <Send onClick={handleSendClick} className="w-5 h-5" />
+      </div>
     </div>
   );
 };
