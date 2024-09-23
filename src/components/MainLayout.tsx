@@ -1,21 +1,9 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import NavBar from "./Header/NavBar";
-import useAuth from "../hooks/useAuth";
+import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
-  const navigate = useNavigate();
-
-  const { setAuth } = useAuth();
-  const handleSignOut = () => {
-    localStorage.removeItem("chatbot-token");
-    setAuth({});
-    navigate("/login");
-  };
-
   return (
     <div>
-      <NavBar onClick={handleSignOut} />
-      <main>
+      <main className="flex flex-col h-screen">
         <Outlet />
       </main>
     </div>
