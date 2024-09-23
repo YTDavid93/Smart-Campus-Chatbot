@@ -1,17 +1,11 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "./Header/NavBar";
-import AuthContext from "../context/AuthProvider";
-import { useContext } from "react";
+import useAuth from "../hooks/useAuth";
 
 const MainLayout = () => {
   const navigate = useNavigate();
-  const authContext = useContext(AuthContext);
 
-  if (!authContext) {
-    throw new Error("AuthContext must be used within an AuthProvider");
-  }
-
-  const { setAuth } = authContext;
+  const { setAuth } = useAuth();
   const handleSignOut = () => {
     localStorage.removeItem("chatbot-token");
     setAuth({});
@@ -20,12 +14,10 @@ const MainLayout = () => {
 
   return (
     <div>
-      <div>
-        <NavBar onClick={handleSignOut} />
-        <main>
-          <Outlet />
-        </main>
-      </div>
+      <NavBar onClick={handleSignOut} />
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };
