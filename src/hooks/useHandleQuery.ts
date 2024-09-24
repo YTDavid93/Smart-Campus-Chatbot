@@ -1,23 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../api/axios";
 import { jwtDecode } from "jwt-decode";
 
 interface Response {
-  interactionId: string,
+  interactionId: string;
   answer: string;
 }
 
 interface Message {
   id: string;
-  text: string;
-  question: string
+  question: string;
+  response: string;
 }
+
 
 const USERR_QUERY = "/questions";
 
 const useHandleQuery = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoaing] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setLoaing(true)
+    axiosInstance.get<Message[]>(USERR_QUERY)
+      .then((res) => {
+        setMessages(res.data);
+        setLoaing(false);
+      })
+      .catch((err) => {
+        if(err instanceof Error) {
+          setError(err.message)
+        }
+      }) 
+  }, []);
 
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("chatbot-token");
@@ -35,7 +51,7 @@ const useHandleQuery = () => {
 
   const sendMessage = async (message: string) => {
     const userId = getUserIdFromToken();
-    
+
     if (!userId) return;
 
     try {
@@ -46,8 +62,8 @@ const useHandleQuery = () => {
 
       const newMessage: Message = {
         id: response.data.interactionId,
-        text: response.data.answer,
-        question: message
+        response: response.data.answer,
+        question: message,
       };
 
       setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -58,7 +74,7 @@ const useHandleQuery = () => {
     }
   };
 
-  return { sendMessage, messages, error };
+  return { sendMessage, messages, error, loading };
 };
 
 export default useHandleQuery;
