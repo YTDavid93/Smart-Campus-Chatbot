@@ -8,33 +8,36 @@ interface Response {
 }
 
 interface Message {
-  id: string;
+  _id: string;
   question: string;
   response: string;
 }
-
 
 const USERR_QUERY = "/questions";
 
 const useHandleQuery = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoaing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    setLoaing(true)
-    axiosInstance.get<Message[]>(USERR_QUERY)
-      .then((res) => {
-        setMessages(res.data);
-        setLoaing(false);
-      })
-      .catch((err) => {
-        if(err instanceof Error) {
-          setError(err.message)
-        }
-      }) 
-  }, []);
+  const fetchMessages = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get<Message[]>(USERR_QUERY);
+      setMessages(response.data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    }
+  };
 
+  useEffect(() => {
+    fetchMessages(); 
+  }, []);
+  
   const getUserIdFromToken = () => {
     const token = localStorage.getItem("chatbot-token");
 
@@ -59,9 +62,9 @@ const useHandleQuery = () => {
         userId,
         question: message,
       });
-
+      
       const newMessage: Message = {
-        id: response.data.interactionId,
+        _id: response.data.interactionId,
         response: response.data.answer,
         question: message,
       };
@@ -74,7 +77,22 @@ const useHandleQuery = () => {
     }
   };
 
-  return { sendMessage, messages, error, loading };
+  
+
+  return { sendMessage, messages, error, loading, setMessages, fetchMessages };
 };
 
 export default useHandleQuery;
+
+  // setLoading(true);
+  // axiosInstance
+  //   .get<Message[]>(USERR_QUERY)
+  //   .then((res) => {
+  //     setMessages(res.data);
+  //     setLoading(false);
+  //   })
+  //   .catch((err) => {
+  //     if (err instanceof Error) {
+  //       setError(err.message);
+  //     }
+  //   });
