@@ -1,12 +1,10 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SignUp from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
 import ProtectedRoute from "./utils/ProtectedRoutes";
 import MainLayout from "./components/MainLayout";
-import DashBoard from "./components/DashBoard";
+import ConversationPage from "./components/ConversationPage";
+import ChatbotForm from "./components/ChatbotForm";
 
 const routes = createBrowserRouter([
   {
@@ -19,7 +17,15 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <DashBoard />,
+        element: <ChatbotForm />, 
+      },
+      {
+        path: "conversations",
+        element: <ChatbotForm />,
+      },
+      {
+        path: "conversations/:conversationId",
+        element: <ConversationPage />,
       },
     ],
   },
