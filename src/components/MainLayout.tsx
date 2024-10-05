@@ -1,32 +1,27 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import SideBar from "./Header/SideBar";
-import useHandleQuery from "@/hooks/useHandleQuery";
-import { useEffect, useState } from "react";
+import NavBar from "./Header/NavBar";
+import useAuth from "@/hooks/useAuth";
 
 const MainLayout = () => {
-  const { messages, setMessages, fetchMessages } = useHandleQuery();
+  const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
-  const [newconversation, setNewConversation] = useState(false);
-
-  useEffect(() => {
-    if (!newconversation) {
-      fetchMessages();
-    }
-  }, [newconversation]);
-
-
-  const handleClick = () => {
-    setMessages([]);
-    console.log(messages);
-    setNewConversation(true)
+  const handleSignOut = () => {
+    localStorage.removeItem("chatbot-token");
+    setAuth({});
+    navigate("/login");
   };
 
   return (
     <div className="flex">
-      <SideBar onClick={handleClick} />
-      <main className="flex flex-1 flex-col h-screen">
-        <Outlet />
-      </main>
+      <SideBar />
+      <div className="flex-1 flex flex-col h-screen">
+        <NavBar onClick={handleSignOut} />
+        <main className="flex flex-col justify-between h-screen overflow-y-auto p-6">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };
