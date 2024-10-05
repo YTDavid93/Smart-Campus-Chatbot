@@ -1,13 +1,18 @@
+import useUserQuery from "@/hooks/useUserQuery";
 import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { DialogDemo } from "../ui/AlertDialog";
+import useAuth from "@/hooks/useAuth";
 
-interface Props {
-  onClick: (message: string) => void;
-}
 
-const ChatInput = ({ onClick }: Props) => {
-  const [message, setMessage] = useState<string>("");
+const ChatInput = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const { initialMessage, setInitialMessage, handleSubmit } =
+    useUserQuery();
+
+  const { title } = useAuth();
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,35 +23,41 @@ const ChatInput = ({ onClick }: Props) => {
     };
 
     handleResize();
-  }, [message]);
+  }, [initialMessage]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
+    setInitialMessage(e.target.value);
   };
 
-  const handleSendClick = () => {
-    if (message.trim() === "") {
-      alert("Please enter a message.");
-      return;
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (!title.trim()) {
+      setIsDialogOpen(true);
+      event.preventDefault();
     }
-    onClick(message);
-    setMessage("");
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
   };
 
   return (
-    <div className="relative">
-      <textarea
-        ref={textareaRef}
-        value={message}
-        placeholder="Type your message here."
-        className="w-full p-2 border border-gray-300 rounded-lg resize-none overflow-hidden"
-        rows={1}
-        onChange={onInputChange}
-      />
-      <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
-        <Send onClick={handleSendClick} className="w-5 h-5" />
+    <form>
+      <DialogDemo isOpen={isDialogOpen} onClose={handleDialogClose} />
+      <div className="relative">
+        <textarea
+          onKeyDown={handleKeyDown}
+          ref={textareaRef}
+          value={initialMessage}
+          placeholder="Type your message here."
+          className="w-full p-2 border border-gray-300 rounded-lg resize-none overflow-hidden"
+          rows={1}
+          onChange={onInputChange}
+        />
+        <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
+          <Send onClick={handleSubmit} className="w-5 h-5" />
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
 
