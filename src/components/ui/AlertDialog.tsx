@@ -39,13 +39,13 @@ export function DialogDemo({ isOpen, onClose }: Props) {
               placeholder="Enter conversation title"
               value={title}
               onChange={handleTitleChange}
-              className="col-span-3"
+              className="col-span-4"
             />
           </div>
         </div>
         <DialogFooter>
           <button type="button" onClick={handleSave}>
-            Save changes
+            Save Title
           </button>
         </DialogFooter>
       </DialogContent>
