@@ -30,7 +30,7 @@ const useSignup = () => {
       }
 
       toast.success("User Logged In successfully");
-      navigate("/");
+      navigate("/conversations");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
