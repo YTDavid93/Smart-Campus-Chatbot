@@ -24,7 +24,6 @@ const useGetQuery = () => {
     axiosInstance
       .get<Conversation[]>("/conversations")
       .then((res) => {
-        console.log(res.data);
         setConversationTitle(res.data);
         setLoading(false);
       })
@@ -82,6 +81,22 @@ const useGetQuery = () => {
     }
   }, [conversationId]);
 
+  const deleteConversation = async (conversationId: string) => {
+    try {
+      setError(null);
+
+      setConversationTitle(
+        conversationTitle.filter((conv) => conv._id !== conversationId)
+      );
+
+      await axiosInstance.delete(`/conversations/${conversationId}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    }
+  };
+
   return {
     conversation,
     loading,
@@ -93,6 +108,7 @@ const useGetQuery = () => {
     question,
     setQuestion,
     conversations,
+    deleteConversation,
   };
 };
 
