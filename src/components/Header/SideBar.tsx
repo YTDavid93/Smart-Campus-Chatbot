@@ -7,6 +7,7 @@ import useAuth from "@/hooks/useAuth";
 import { BsThreeDots } from "react-icons/bs";
 import { useState } from "react";
 import ShowPopover from "../ui/ShowPopover";
+import useUserQuery from "@/hooks/useUserQuery";
 
 const SideBar = () => {
   const {
@@ -18,6 +19,7 @@ const SideBar = () => {
   } = useGetQuery();
   const navigate = useNavigate();
   const { setConversations, conversations } = useAuth();
+  const { setNewMessages, newMessages } = useUserQuery();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [hoveredConversationId, setHoveredConversationId] = useState<
@@ -46,10 +48,11 @@ const SideBar = () => {
   };
 
   const startNewConversation = () => {
-    localStorage.removeItem("currentConversationId");
-    localStorage.removeItem("currentConversationTitle");
+    setNewMessages([]);
     setConversations(null);
     navigate("/conversations");
+    localStorage.removeItem("currentConversationId");
+    localStorage.removeItem("currentConversationTitle");
   };
 
   const filteredTitle = conversationTitle.filter(

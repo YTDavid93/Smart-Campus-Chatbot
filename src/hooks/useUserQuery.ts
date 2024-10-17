@@ -16,8 +16,7 @@ export interface Conversation {
 
 const CONVERSATION_ROUTE = "/conversations";
 
-const useUserQuery = () => 
-  {
+const useUserQuery = () => {
   const { title, setTitle } = useAuth();
   const [initialMessage, setInitialMessage] = useState("");
   const [error, setError] = useState("");
@@ -47,8 +46,11 @@ const useUserQuery = () =>
           if (err instanceof Error) setError(err.message);
         });
     }
-  }, [conversations, setConversations, setTitle]);
 
+    if (!conversations) {
+      setNewMessages([]);
+    }
+  }, [conversations, setConversations, setTitle]);
 
   const handleSubmit = async () => {
     try {
@@ -83,6 +85,7 @@ const useUserQuery = () =>
     error,
     initialMessage,
     setInitialMessage,
+    setNewMessages,
     title,
     setTitle,
     conversations,
