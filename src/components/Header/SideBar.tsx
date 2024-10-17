@@ -19,7 +19,7 @@ const SideBar = () => {
   } = useGetQuery();
   const navigate = useNavigate();
   const { setConversations, conversations } = useAuth();
-  const { setNewMessages, newMessages } = useUserQuery();
+  const { setNewMessages } = useUserQuery();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [hoveredConversationId, setHoveredConversationId] = useState<
