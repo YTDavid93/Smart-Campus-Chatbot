@@ -12,6 +12,7 @@ export interface Conversation {
   title: string;
   messages: Messages[];
   _id: string;
+  createdAt: string;
 }
 
 const CONVERSATION_ROUTE = "/conversations";

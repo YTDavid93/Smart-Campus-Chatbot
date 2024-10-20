@@ -7,7 +7,7 @@ import useAuth from "@/hooks/useAuth";
 import { BsThreeDots } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import ShowPopover from "../ui/ShowPopover";
-import useUserQuery from "@/hooks/useUserQuery";
+import useUserQuery, { Conversation } from "@/hooks/useUserQuery";
 
 const SideBar = () => {
   const { loading, error, fetchUserConversation, deleteConversation } =
@@ -16,6 +16,8 @@ const SideBar = () => {
   const { setNewMessages } = useUserQuery();
 
   const { setConversations, conversationTitle, setTitle } = useAuth();
+
+  console.log("conversationTitle:", conversationTitle);
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [hoveredConversationId, setHoveredConversationId] = useState<
@@ -99,7 +101,12 @@ const SideBar = () => {
       <div className="flex flex-col gap-4 mt-5 relative">
         {conversationTitle &&
           conversationTitle.length > 0 &&
-          conversationTitle.map((conv) => (
+          conversationTitle.sort((a: Conversation, b: Conversation) => {
+            // Sorting by 'createdAt' field in descending order (latest first)
+            return (
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          }).map((conv) => (
             <div
               key={conv._id}
               className={`cursor-pointer p-2 rounded-md flex justify-between items-center ${
@@ -112,7 +119,6 @@ const SideBar = () => {
               onMouseLeave={() => setHoveredConversationId(null)}
             >
               <span>{conv.title}</span>
-
               {hoveredConversationId === conv._id && (
                 <BsThreeDots
                   onClick={(e) => handleThreeDotsClick(e, conv._id, conv.title)}
