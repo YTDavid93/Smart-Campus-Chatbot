@@ -5,30 +5,25 @@ import { Loader } from "@/utils/Loading";
 import ErrorMessage from "@/utils/ErrorMessage";
 import useAuth from "@/hooks/useAuth";
 import { BsThreeDots } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShowPopover from "../ui/ShowPopover";
 import useUserQuery from "@/hooks/useUserQuery";
 
 const SideBar = () => {
-  const {
-    conversationTitle,
-    loading,
-    error,
-    fetchUserConversation,
-    deleteConversation,
-  } = useGetQuery();
+  const { loading, error, fetchUserConversation, deleteConversation } =
+    useGetQuery();
   const navigate = useNavigate();
-  const { setConversations, conversations } = useAuth();
   const { setNewMessages } = useUserQuery();
+
+  const { setConversations, conversationTitle, setTitle } = useAuth();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [hoveredConversationId, setHoveredConversationId] = useState<
     string | null
   >(null);
-  const [selectedConversationId, setSelectedConversationId] = useState<
+  const [activeConversationId, setActiveConversationId] = useState<
     string | null
   >(null);
-
   const [popoverPosition, setPopoverPosition] = useState<{
     top: number;
     left: number;
@@ -37,44 +32,32 @@ const SideBar = () => {
     string | null
   >(null);
 
+  useEffect(() => {
+    console.log("Updated conversationTitle: ", conversationTitle);
+  }, [conversationTitle]);
+
   const handleTitleClick = (
     conversationId: string,
     conversationTitle: string
   ) => {
-    fetchUserConversation(conversationId);
+    setActiveConversationId(conversationId);
+    setTitle(conversationTitle);
     navigate(`/conversations/${conversationId}`);
     localStorage.setItem("currentConversationId", conversationId);
     localStorage.setItem("currentConversationTitle", conversationTitle);
+    fetchUserConversation(conversationId);
   };
 
   const startNewConversation = () => {
     setNewMessages([]);
     setConversations(null);
+    setActiveConversationId(null);
     navigate("/conversations");
     localStorage.removeItem("currentConversationId");
     localStorage.removeItem("currentConversationTitle");
   };
 
-  const filteredTitle = conversationTitle.filter(
-    (el) => el._id !== conversations?._id
-  );
-
-  const handleThreeDotsClickActive = (e: React.MouseEvent, title: string) => {
-    e.stopPropagation();
-
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const newPosition = {
-      top: rect.top + window.scrollY,
-      left: rect.left + window.scrollX,
-    };
-
-    setPopoverPosition(newPosition);
-    setSelectedConversationTitle(title);
-    setSelectedConversationId(conversations?._id ?? null);
-    setIsPopoverOpen((prev) => !prev);
-  };
-
-  const handleThreeDotsClickFiltered = (
+  const handleThreeDotsClick = (
     e: React.MouseEvent,
     conversationId: string,
     title: string
@@ -89,14 +72,15 @@ const SideBar = () => {
 
     setPopoverPosition(newPosition);
     setSelectedConversationTitle(title);
-    setSelectedConversationId(conversationId);
+    setActiveConversationId(conversationId);
     setIsPopoverOpen((prev) => !prev);
   };
 
   const handleDeleteConversation = () => {
-    if (selectedConversationId) {
-      deleteConversation(selectedConversationId);
+    if (activeConversationId) {
+      deleteConversation(activeConversationId);
       setIsPopoverOpen(false);
+      setActiveConversationId(null);
       localStorage.removeItem("currentConversationId");
       localStorage.removeItem("currentConversationTitle");
       navigate("/conversations");
@@ -104,7 +88,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="h-screen w-[260px] bg-[#f4f4f4] p-4">
+    <div className="h-screen w-[260px] bg-[#f4f4f4] p-4 overflow-y-auto">
       <div className="flex justify-end cursor-pointer">
         <Plus onClick={startNewConversation} />
       </div>
@@ -113,39 +97,25 @@ const SideBar = () => {
       {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <div className="flex flex-col gap-4 mt-5 relative">
-        {conversations && (
-          <div
-            key={conversations._id}
-            className="cursor-pointer bg-slate-300 rounded-md p-2 flex items-center justify-between"
-            onClick={() =>
-              handleTitleClick(conversations._id, conversations.title)
-            }
-          >
-            <span>{conversations.title}</span>
-            <BsThreeDots
-              onClick={(e) =>
-                handleThreeDotsClickActive(e, conversations.title)
-              }
-            />
-          </div>
-        )}
-
-        {filteredTitle &&
-          filteredTitle.map((conv) => (
+        {conversationTitle &&
+          conversationTitle.length > 0 &&
+          conversationTitle.map((conv) => (
             <div
               key={conv._id}
-              className="cursor-pointer hover:bg-slate-300 transition-transform duration-200 ease-in-out transform hover:scale-105 p-2 rounded-md flex justify-between items-center"
+              className={`cursor-pointer p-2 rounded-md flex justify-between items-center ${
+                conv._id === activeConversationId
+                  ? "bg-slate-300"
+                  : "hover:bg-slate-300"
+              }`}
+              onClick={() => handleTitleClick(conv._id, conv.title)}
               onMouseEnter={() => setHoveredConversationId(conv._id)}
               onMouseLeave={() => setHoveredConversationId(null)}
-              onClick={() => handleTitleClick(conv._id, conv.title)}
             >
               <span>{conv.title}</span>
 
               {hoveredConversationId === conv._id && (
                 <BsThreeDots
-                  onClick={(e) =>
-                    handleThreeDotsClickFiltered(e, conv._id, conv.title)
-                  }
+                  onClick={(e) => handleThreeDotsClick(e, conv._id, conv.title)}
                 />
               )}
             </div>

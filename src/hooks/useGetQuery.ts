@@ -1,12 +1,13 @@
 import axiosInstance from "@/api/axios";
-import { useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "./useAuth";
 import { Conversation, Messages } from "./useUserQuery";
 
 const useGetQuery = () => {
   const { conversationId } = useParams();
-  const [conversation, setConversation] = useState<Response | null>(null);
+  const [conversation, setConversation] = useState<Conversation | null>(null);
+
   const {
     conversations,
     setConversations,
@@ -18,17 +19,21 @@ const useGetQuery = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Fetch conversation titles
+  // fetch conversations title
+  const fetchConversationTitles = async () => {
+    try {
+      const res = await axiosInstance.get<Conversation[]>("/conversations");
+      setConversationTitle(res.data);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+    }
+  };
+
   useEffect(() => {
-    setLoading(true);
-    axiosInstance
-      .get<Conversation[]>("/conversations")
-      .then((res) => {
-        setConversationTitle(res.data);
-        setLoading(false);
-      })
-      .catch((err) => setError(err.message));
-  }, []);
+    fetchConversationTitles();
+  }, [conversations]);
 
   // Fetch a specific conversation
   const fetchUserConversation = async (conversationId: string) => {
@@ -52,9 +57,7 @@ const useGetQuery = () => {
     try {
       const postResponse = await axiosInstance.post<Conversation>(
         `/conversations/${conversationId}`,
-        {
-          question,
-        }
+        { question }
       );
 
       const message: Messages =
@@ -113,3 +116,4 @@ const useGetQuery = () => {
 };
 
 export default useGetQuery;
+

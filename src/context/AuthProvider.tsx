@@ -27,7 +27,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: Props) => {
   const [auth, setAuth] = useState<AuthContextType["auth"]>({});
   const [conversations, setConversations] = useState<Conversation | null>(null);
-  const [conversationTitle, setConversationTitle] = useState<Conversation[]>([]);
+  const [conversationTitle, setConversationTitle] = useState<Conversation[]>(
+    []
+  );
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +60,7 @@ export const AuthProvider = ({ children }: Props) => {
         title,
         setTitle,
         conversationTitle,
-        setConversationTitle
+        setConversationTitle,
       }}
     >
       {children}
