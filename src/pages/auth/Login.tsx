@@ -36,7 +36,7 @@ const Login = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <h1 className="text-center mb-3 text-xl">
-          LogIn on <span className=" text-customBlue">Financely</span>.
+          LogIn on <span className=" text-customBlue">ThamesBot</span>.
         </h1>
 
         <div className="mb-3">

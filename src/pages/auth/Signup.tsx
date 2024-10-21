@@ -52,7 +52,7 @@ const SignUp = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <h1 className="text-center mb-3 text-xl">
-          Sign Up on <span className=" text-customBlue">Financely.</span>
+          Sign Up on <span className=" text-customBlue">ThamesBot</span>
         </h1>
 
         <div className="mb-3">
