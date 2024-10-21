@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 
 html {
   box-sizing: border-box;
@@ -13,6 +15,8 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: inherit;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
 }
 
 body {
