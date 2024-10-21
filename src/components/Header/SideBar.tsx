@@ -8,6 +8,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { useState } from "react";
 import ShowPopover from "../ui/ShowPopover";
 import useUserQuery, { Conversation } from "@/hooks/useUserQuery";
+import HoverCardDemo from "../ui/HoverCardDemo";
 
 const SideBar = () => {
   const { loading, error, fetchUserConversation, deleteConversation } =
@@ -15,8 +16,7 @@ const SideBar = () => {
   const navigate = useNavigate();
   const { setNewMessages } = useUserQuery();
 
-  const { setConversations, conversationTitle, setTitle } =
-    useAuth();
+  const { setConversations, conversationTitle, setTitle } = useAuth();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [hoveredConversationId, setHoveredConversationId] = useState<
@@ -48,7 +48,7 @@ const SideBar = () => {
   const startNewConversation = () => {
     setNewMessages([]);
     setConversations(null);
-    setTitle('');
+    setTitle("");
     setActiveConversationId(null);
     localStorage.removeItem("currentConversationId");
     localStorage.removeItem("currentConversationTitle");
@@ -88,13 +88,15 @@ const SideBar = () => {
   return (
     <div className="h-screen w-[260px] bg-[#f4f4f4] p-4 overflow-y-auto">
       <div className="flex justify-end cursor-pointer">
-        <Plus onClick={startNewConversation} />
+        <HoverCardDemo>
+          <Plus onClick={startNewConversation}></Plus>
+        </HoverCardDemo>
       </div>
 
       {loading && <Loader />}
       {error && <ErrorMessage>{error}</ErrorMessage>}
 
-      <div className="flex flex-col gap-4 mt-5 relative">
+      <div className="flex flex-col gap-4 mt-7 relative">
         {conversationTitle &&
           conversationTitle.length > 0 &&
           conversationTitle
