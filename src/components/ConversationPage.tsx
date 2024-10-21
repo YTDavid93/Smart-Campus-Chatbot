@@ -33,9 +33,9 @@ const ConversationPage = () => {
               ))}
             </div>
           )}
-          {conversationId && <ChatInputForm conversationId={conversationId} />}
         </div>
-      )}
+      )}    
+      {conversationId && <ChatInputForm conversationId={conversationId} />}
     </>
   );
 };
