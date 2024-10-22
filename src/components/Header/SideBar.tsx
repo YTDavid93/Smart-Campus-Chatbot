@@ -79,6 +79,7 @@ const SideBar = () => {
       deleteConversation(activeConversationId);
       setIsPopoverOpen(false);
       setActiveConversationId(null);
+      setTitle("")
       localStorage.removeItem("currentConversationId");
       localStorage.removeItem("currentConversationTitle");
       navigate("/conversations");
