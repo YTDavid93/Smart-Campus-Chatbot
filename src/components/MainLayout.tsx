@@ -9,10 +9,12 @@ const MainLayout = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem("chatbot-token");
+    localStorage.removeItem("currentConversationId");
+    localStorage.removeItem("currentConversationTitle");
     setAuth({});
     navigate("/login");
   };
-
+  
   return (
     <div className="flex">
       <SideBar />
