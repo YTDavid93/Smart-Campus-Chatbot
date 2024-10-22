@@ -7,16 +7,17 @@ import { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
+  name: string
 }
 
-const HoverCardDemo = ({ children }: Props) => {
+const HoverCardDemo = ({ children, name }: Props) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         {children}
       </HoverCardTrigger>
       <HoverCardContent className="w-50">  
-        <h4 className="text-sm font-semibold">New Chat</h4>
+        <h4 className="text-sm font-semibold">{name}</h4>
       </HoverCardContent>
     </HoverCard>
   );
