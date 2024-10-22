@@ -7,11 +7,13 @@ import axiosInstance from "../api/axios";
 const LOGIN_URL = "/auth";
 
 const useSignup = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, setConversations } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+
 
   const handleAuthLogin = async (data: { email: string; password: string }) => {
     setLoading(true);
@@ -31,6 +33,9 @@ const useSignup = () => {
 
       toast.success("User Logged In successfully");
       navigate("/conversations");
+      localStorage.removeItem("currentConversationId");
+      localStorage.removeItem("currentConversationTitle");
+      setConversations(null);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
