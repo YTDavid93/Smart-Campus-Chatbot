@@ -120,21 +120,19 @@ const SideBar = () => {
                 onMouseLeave={() => setHoveredConversationId(null)}
               >
                 <span>{conv.title}</span>
-                {conv._id === activeConversationId ? (
+                <HoverCardDemo name="Options">
                   <BsThreeDots
+                    className={`${
+                      conv._id === activeConversationId ||
+                      hoveredConversationId === conv._id
+                        ? "visible"
+                        : "invisible"
+                    }`}
                     onClick={(e) =>
                       handleThreeDotsClick(e, conv._id, conv.title)
                     }
                   />
-                ) : (
-                  hoveredConversationId === conv._id && (
-                    <BsThreeDots
-                      onClick={(e) =>
-                        handleThreeDotsClick(e, conv._id, conv.title)
-                      }
-                    />
-                  )
-                )}
+                </HoverCardDemo>
               </div>
             ))}
 
