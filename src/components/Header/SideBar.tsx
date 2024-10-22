@@ -89,7 +89,7 @@ const SideBar = () => {
     <div className="h-screen w-[260px] bg-[#f4f4f4] p-4 overflow-y-auto">
       <div className="flex justify-end cursor-pointer">
         <HoverCardDemo>
-          <Plus onClick={startNewConversation}></Plus>
+          <Plus onClick={startNewConversation} />
         </HoverCardDemo>
       </div>
 
