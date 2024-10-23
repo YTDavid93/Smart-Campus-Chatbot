@@ -34,8 +34,6 @@ const SideBar = () => {
     string | null
   >(null);
 
-  console.log("conversationId", activeConversationId);
-
   const handleTitleClick = (
     conversationId: string,
     conversationTitle: string
