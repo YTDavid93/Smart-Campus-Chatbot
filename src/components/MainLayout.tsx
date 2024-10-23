@@ -20,7 +20,7 @@ const MainLayout = () => {
       <SideBar />
       <div className="flex-1 flex flex-col h-screen">
         <NavBar onClick={handleSignOut} />
-        <main className="flex flex-col justify-between h-screen overflow-y-auto p-6">
+        <main className="flex flex-col justify-between h-screen overflow-y-auto p-6 bg-white">
           <Outlet />
         </main>
       </div>
