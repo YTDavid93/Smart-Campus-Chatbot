@@ -9,6 +9,7 @@ import { useState } from "react";
 import ShowPopover from "../ui/ShowPopover";
 import useUserQuery, { Conversation } from "@/hooks/useUserQuery";
 import HoverCardDemo from "../ui/HoverCardDemo";
+import { toast } from "react-toastify";
 
 const SideBar = () => {
   const { loading, error, fetchUserConversation, deleteConversation } =
@@ -32,6 +33,8 @@ const SideBar = () => {
   const [selectedConversationTitle, setSelectedConversationTitle] = useState<
     string | null
   >(null);
+
+  console.log("conversationId", activeConversationId);
 
   const handleTitleClick = (
     conversationId: string,
@@ -83,6 +86,7 @@ const SideBar = () => {
       localStorage.removeItem("currentConversationId");
       localStorage.removeItem("currentConversationTitle");
       navigate("/conversations");
+      toast.success(`Conversation ${activeConversationId} deleted Successfully`)
     }
   };
 
