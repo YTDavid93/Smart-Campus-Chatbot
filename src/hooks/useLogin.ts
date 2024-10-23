@@ -13,8 +13,6 @@ const useSignup = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-
-
   const handleAuthLogin = async (data: { email: string; password: string }) => {
     setLoading(true);
     setError("");
@@ -36,8 +34,12 @@ const useSignup = () => {
       localStorage.removeItem("currentConversationId");
       localStorage.removeItem("currentConversationTitle");
       setConversations(null);
-    } catch (err) {
-      if (err instanceof Error) {
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        if (err.response.data.message) {
+          setError(err.response.data.message);
+        }
+      } else if (err instanceof Error) {
         setError(err.message);
       }
     } finally {
