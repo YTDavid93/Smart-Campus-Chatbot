@@ -8,13 +8,14 @@ import { ReactNode } from "react";
 interface Props {
   children: ReactNode;
   name: string;
+  className?: string;
 }
 
-const HoverCardDemo = ({ children, name }: Props) => {
+const HoverCardDemo = ({ children, name, className }: Props) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <button>{children}</button>
+        <button className={className}>{children}</button>
       </HoverCardTrigger>
       <HoverCardContent className="w-auto">
         <h4 className=" text-xs font-semibold">{name}</h4>
