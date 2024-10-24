@@ -12,6 +12,7 @@ import HoverCardDemo from "../ui/HoverCardDemo";
 import { toast } from "react-toastify";
 import { GoSidebarExpand } from "react-icons/go";
 import { motion } from "framer-motion";
+import IconHoverCard from "@/utils/IconHoverCard";
 
 const SideBar = () => {
   const { loading, error, fetchUserConversation, deleteConversation } =
@@ -98,24 +99,21 @@ const SideBar = () => {
     <>
       <div className="flex flex-col h-screen">
         {showControls && (
-          <div className="flex flex-col gap-14 p-6">
-            <div className="inline-flex">
-              <HoverCardDemo name={isSidebarOpen ? "Close sidebar" : "Open sidebar"}>
-                <GoSidebarExpand
-                  className="w-6 h-6"
-                  onClick={() => {
-                    setIsSidebarOpen(!isSidebarOpen);
-                    setShowControls(true);
-                  }}
-                />
-              </HoverCardDemo>
-            </div>
+          <div className="flex flex-col gap-14 p-4">
+            <IconHoverCard
+              name={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+              onClick={() => {
+                setIsSidebarOpen(!isSidebarOpen);
+                setShowControls(true);
+              }}
+              icon={<GoSidebarExpand className="w-6 h-6" />}
+            />
 
-            <div className="inline-flex">
-              <HoverCardDemo name="New Chat">
-                <Plus onClick={startNewConversation} />
-              </HoverCardDemo>
-            </div>
+            <IconHoverCard
+              name="New Chat"
+              onClick={startNewConversation}
+              icon={<Plus className="w-6 h-6" />}
+            />
           </div>
         )}
 
