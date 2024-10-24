@@ -8,9 +8,10 @@ import { ReactNode } from "react";
 interface Props {
   children: ReactNode;
   name: string;
+  className?: string
 }
 
-const HoverCardDemo = ({ children, name }: Props) => {
+const HoverCardDemo = ({ children, name, className }: Props) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
