@@ -102,7 +102,7 @@ const SideBar = () => {
         {showControls && (
           <div className="flex flex-col gap-14 p-6">
             <div className="inline-flex">
-              <HoverCardDemo name="Close Sidebar">
+              <HoverCardDemo name={isSidebarOpen ? "Close sidebar" : "Open sidebar"}>
                 <GoSidebarExpand
                   className="w-6 h-6"
                   onClick={() => {
