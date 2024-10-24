@@ -73,8 +73,6 @@ const SideBar = () => {
       left: rect.left + window.scrollX,
     };
 
-    console.log("position", newPosition);
-
     setPopoverPosition(newPosition);
     setSelectedConversationTitle(title);
     setActiveConversationId(conversationId);
@@ -176,8 +174,8 @@ const SideBar = () => {
                   <div
                     className="absolute"
                     style={{
-                      top: popoverPosition.top - 180,
-                      left: popoverPosition.left,
+                      top: popoverPosition.top - 200,
+                      left: popoverPosition.left + 100,
                     }}
                   >
                     <ShowPopover
