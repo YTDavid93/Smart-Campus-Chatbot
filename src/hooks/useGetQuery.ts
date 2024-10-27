@@ -1,5 +1,5 @@
 import axiosInstance from "@/api/axios";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "./useAuth";
 import { Conversation, Messages } from "./useUserQuery";
@@ -79,7 +79,10 @@ const useGetQuery = () => {
   };
 
   useEffect(() => {
-    if (conversationId) {
+    if (
+      conversationId &&
+      (!conversations || conversations._id !== conversationId)
+    ) {
       fetchUserConversation(conversationId);
     }
   }, [conversationId]);
@@ -116,4 +119,3 @@ const useGetQuery = () => {
 };
 
 export default useGetQuery;
-

@@ -1,6 +1,7 @@
 import axiosInstance from "@/api/axios";
 import { useEffect, useState } from "react";
 import useAuth from "./useAuth";
+import { useNavigate } from "react-router-dom";
 
 export interface Messages {
   _id: string;
@@ -23,6 +24,7 @@ const useUserQuery = () => {
   const [error, setError] = useState("");
   const [newMessages, setNewMessages] = useState<Messages[]>([]);
   const { conversations, setConversations } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedConversationId = localStorage.getItem("currentConversationId");
@@ -63,14 +65,17 @@ const useUserQuery = () => {
         }
       );
 
+      const newConversationId = response.data._id;
       const message: Messages =
         response.data.messages[response.data.messages.length - 1];
 
       setNewMessages((prevMessages) => [...prevMessages, message]);
       setConversations(response.data);
 
-      localStorage.setItem("currentConversationId", response.data._id);
+      localStorage.setItem("currentConversationId", newConversationId);
       localStorage.setItem("currentConversationTitle", response.data.title);
+
+      navigate(`/conversations/${newConversationId}`);
 
       setInitialMessage("");
     } catch (err) {
