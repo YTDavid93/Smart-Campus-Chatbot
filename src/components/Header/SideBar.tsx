@@ -19,14 +19,10 @@ const SideBar = () => {
     useGetQuery();
   const navigate = useNavigate();
   const { setNewMessages } = useUserQuery();
-
   const { setConversations, conversationTitle, setTitle } = useAuth();
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [hoveredConversationId, setHoveredConversationId] = useState<
-    string | null
-  >(null);
-  const [activeConversationId, setActiveConversationId] = useState<
     string | null
   >(null);
   const [popoverPosition, setPopoverPosition] = useState<{
@@ -38,12 +34,17 @@ const SideBar = () => {
   >(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [showControls, setShowControls] = useState<boolean>(true);
+  const [selectedConversationId, setSelectedConversationId] = useState<
+    string | null
+  >(null);
+
+  // Get the active conversation ID from local storage
+  const conversationID = localStorage.getItem("currentConversationId");
 
   const handleTitleClick = (
     conversationId: string,
     conversationTitle: string
   ) => {
-    setActiveConversationId(conversationId);
     setTitle(conversationTitle);
     navigate(`/conversations/${conversationId}`);
     localStorage.setItem("currentConversationId", conversationId);
@@ -55,7 +56,6 @@ const SideBar = () => {
     setNewMessages([]);
     setConversations(null);
     setTitle("");
-    setActiveConversationId(null);
     localStorage.removeItem("currentConversationId");
     localStorage.removeItem("currentConversationTitle");
     navigate("/conversations");
@@ -76,23 +76,28 @@ const SideBar = () => {
 
     setPopoverPosition(newPosition);
     setSelectedConversationTitle(title);
-    setActiveConversationId(conversationId);
-    setIsPopoverOpen((prev) => !prev);
+    setSelectedConversationId(conversationId);
+    setIsPopoverOpen(true);
   };
 
   const handleDeleteConversation = () => {
-    if (activeConversationId) {
-      deleteConversation(activeConversationId);
+    if (selectedConversationId) {
+      deleteConversation(selectedConversationId);
       setIsPopoverOpen(false);
-      setActiveConversationId(null);
+      setSelectedConversationId(null);
       setTitle("");
       localStorage.removeItem("currentConversationId");
       localStorage.removeItem("currentConversationTitle");
       navigate("/conversations");
       toast.success(
-        `Conversation ${activeConversationId} deleted Successfully`
+        `Conversation ${selectedConversationId} deleted Successfully`
       );
     }
+  };
+
+  const handleClosePopover = () => {
+    setIsPopoverOpen(false);
+    setSelectedConversationId(null);
   };
 
   return (
@@ -108,7 +113,6 @@ const SideBar = () => {
               }}
               icon={<GoSidebarExpand className="w-6 h-6" />}
             />
-
             <IconHoverCard
               name="New Chat"
               onClick={startNewConversation}
@@ -132,21 +136,27 @@ const SideBar = () => {
                 {conversationTitle &&
                   conversationTitle.length > 0 &&
                   conversationTitle
-                    .sort((a: Conversation, b: Conversation) => {
-                      // Sorting by 'createdAt' field in descending order (latest first)
-                      return (
+                    .sort(
+                      (a: Conversation, b: Conversation) =>
                         new Date(b.createdAt).getTime() -
                         new Date(a.createdAt).getTime()
-                      );
-                    })
+                    )
                     .map((conv) => (
                       <div
                         key={conv._id}
-                        className={`cursor-pointer p-2 rounded-md flex justify-between items-center ${
-                          conv._id === activeConversationId
-                            ? "bg-slate-300"
-                            : "hover:bg-slate-300"
-                        }`}
+                        className={`cursor-pointer p-2 rounded-md flex justify-between items-center 
+                          ${conv._id === conversationID ? "bg-slate-300" : ""} 
+                          ${
+                            conv._id === selectedConversationId
+                              ? "bg-slate-200"
+                              : ""
+                          } 
+                          ${
+                            hoveredConversationId === conv._id &&
+                            conv._id !== conversationID
+                              ? "bg-slate-300"
+                              : ""
+                          }`}
                         onClick={() => handleTitleClick(conv._id, conv.title)}
                         onMouseEnter={() => setHoveredConversationId(conv._id)}
                         onMouseLeave={() => setHoveredConversationId(null)}
@@ -155,8 +165,9 @@ const SideBar = () => {
                         <HoverCardDemo name="Options">
                           <BsThreeDots
                             className={`${
-                              conv._id === activeConversationId ||
-                              hoveredConversationId === conv._id
+                              conv._id === conversationID ||
+                              hoveredConversationId === conv._id ||
+                              selectedConversationId === conv._id
                                 ? "visible"
                                 : "invisible"
                             }`}
@@ -178,7 +189,7 @@ const SideBar = () => {
                   >
                     <ShowPopover
                       isOpen={isPopoverOpen}
-                      onClose={() => setIsPopoverOpen(false)}
+                      onClose={handleClosePopover}
                       onDelete={handleDeleteConversation}
                       conversationTitle={selectedConversationTitle}
                     />
