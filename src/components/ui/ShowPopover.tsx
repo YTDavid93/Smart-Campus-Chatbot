@@ -3,16 +3,15 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import DeleteDialog from "./DeleteDialog";
+import { ReactNode } from "react";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onDelete: () => void;
-  conversationTitle: string | null;
+  children: ReactNode;
 }
 
-const ShowPopover = ({ isOpen, onClose, onDelete, conversationTitle }: Props) => {
+const ShowPopover = ({ isOpen, onClose, children }: Props) => {
 
   return (
     <Popover open={isOpen} onOpenChange={onClose}>
@@ -20,11 +19,7 @@ const ShowPopover = ({ isOpen, onClose, onDelete, conversationTitle }: Props) =>
       </PopoverTrigger>
 
       <PopoverContent className="w-40 bg-white shadow-lg p-2 rounded-md">
-        <DeleteDialog
-          conversationTitle={conversationTitle}
-          onDelete={onDelete} 
-          onCancel={onClose}
-        />
+        {children}
       </PopoverContent>
     </Popover>
   );

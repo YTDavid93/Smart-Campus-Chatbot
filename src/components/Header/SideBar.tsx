@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { GoSidebarExpand } from "react-icons/go";
 import { motion } from "framer-motion";
 import IconHoverCard from "@/utils/IconHoverCard";
+import DeleteDialog from "../ui/DeleteDialog";
 
 const SideBar = () => {
   const { loading, error, fetchUserConversation, deleteConversation } =
@@ -190,9 +191,13 @@ const SideBar = () => {
                     <ShowPopover
                       isOpen={isPopoverOpen}
                       onClose={handleClosePopover}
-                      onDelete={handleDeleteConversation}
-                      conversationTitle={selectedConversationTitle}
-                    />
+                    >
+                      <DeleteDialog
+                        onDelete={handleDeleteConversation}
+                        conversationTitle={selectedConversationTitle}
+                        onCancel={handleClosePopover}
+                      />
+                    </ShowPopover>
                   </div>
                 )}
               </div>

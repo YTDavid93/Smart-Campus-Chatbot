@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoApps } from "react-icons/io5";
-import ShowPopoverLogout from "../ui/ShowPopoverLogout";
 import { MdOutlineLogout } from "react-icons/md";
+import ShowPopover from "../ui/ShowPopover";
 
 interface Props {
   onClick: () => void;
@@ -23,7 +23,7 @@ const NavBar = ({ onClick }: Props) => {
         />
         {isPopoverOpen && (
           <div className="absolute right-0 top-full transform translate-x-4">
-            <ShowPopoverLogout
+            <ShowPopover
               isOpen={isPopoverOpen}
               onClose={() => setIsPopoverOpen(false)}
             >
@@ -34,7 +34,7 @@ const NavBar = ({ onClick }: Props) => {
                 <MdOutlineLogout />
                 <span>Logout</span>
               </button>
-            </ShowPopoverLogout>
+            </ShowPopover>
           </div>
         )}
       </div>
