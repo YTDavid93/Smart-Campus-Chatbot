@@ -39,16 +39,17 @@ const useUserQuery = () => {
         .catch((err) => {
           if (err instanceof Error) setError(err.message);
         });
-    } else if (conversations?._id) {
-      axiosInstance
-        .get<Conversation>(`${CONVERSATION_ROUTE}/${conversations._id}`)
-        .then((res) => {
-          setNewMessages(res.data.messages);
-        })
-        .catch((err) => {
-          if (err instanceof Error) setError(err.message);
-        });
-    }
+    } 
+    // else if (conversations?._id) {
+    //   axiosInstance
+    //     .get<Conversation>(`${CONVERSATION_ROUTE}/${conversations._id}`)
+    //     .then((res) => {
+    //       setNewMessages(res.data.messages);
+    //     })
+    //     .catch((err) => {
+    //       if (err instanceof Error) setError(err.message);
+    //     });
+    // }
 
     if (!conversations) {
       setNewMessages([]);
