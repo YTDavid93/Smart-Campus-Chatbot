@@ -4,13 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { DialogDemo } from "../ui/AlertDialog";
 import useAuth from "@/hooks/useAuth";
 
-
 const ChatInput = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  const { initialMessage, setInitialMessage, handleSubmit } =
-    useUserQuery();
+  const { initialMessage, setInitialMessage, handleSubmit } = useUserQuery();
 
   const { title } = useAuth();
 
@@ -53,8 +51,18 @@ const ChatInput = () => {
           rows={1}
           onChange={onInputChange}
         />
-        <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
-          <Send onClick={handleSubmit} className="w-5 h-5" />
+        <div
+          className={`absolute bottom-[14px] right-3 cursor-pointer ${
+            !initialMessage.trim()
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:opacity-50"
+          }`}
+        >
+          <Send
+            onClick={handleSubmit}
+            className="w-5 h-5"
+            style={{ pointerEvents: !initialMessage.trim() ? "none" : "auto" }}
+          />
         </div>
       </div>
     </form>

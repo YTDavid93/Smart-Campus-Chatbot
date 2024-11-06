@@ -37,12 +37,19 @@ const ChatInputForm = ({ conversationId }: Props) => {
           rows={1}
           onChange={onInputChange}
         />
-        <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
+        <div
+          className={`absolute bottom-[14px] right-3 cursor-pointer ${
+            !question.trim()
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:opacity-50"
+          }`}
+        >
           <Send
             onClick={() => {
               chatInput(conversationId);
             }}
             className="w-5 h-5"
+            style={{ pointerEvents: !question.trim() ? "none" : "auto" }}
           />
         </div>
       </div>
